@@ -94,16 +94,15 @@ int main(void)
 	Clock_Init();
 	printRegisters();
 	
-	send_data(greatings, sizeof(greatings));
-	//delay(5);
-	send_data(query_B3, 9);
+	send_data(query_B1, 9);
+	
 #if ST_USE_OTA_SERVICE_MANAGER_APPLICATION
   /* Initialize the button */
   SdkEvalPushButtonInit(USER_BUTTON); 
 #endif /* ST_USE_OTA_SERVICE_MANAGER_APPLICATION */
 	
   /* Enable the callback end_of_radio_activity_event for advertising */
-  aci_hal_set_radio_activity_mask(0x0002); 
+  //aci_hal_set_radio_activity_mask(0x0002); 
 	
   /* Start Beacon Non Connectable Mode*/
   Start_Beaconing();
@@ -117,14 +116,15 @@ int main(void)
   {
     /* BlueNRG-1 stack tick */
     BTLE_StackTick();
-			BlueNRG_Sleep(SLEEPMODE_NOTIMER  , WAKEUP_IO12, 0x08);
-		if(bt == true)
-		{
-			send_data(query_B3, 9);
-			bt = false;
-			
-		}
-setModeIDLE();
+		BlueNRG_Sleep(SLEEPMODE_NOTIMER  ,0,0);
+		GPIO_WriteBit(Get_LedGpioPin(LED1), LED_OFF);
+//		if(bt == true)
+//		{
+//			send_data(query_B3, 9);
+//			bt = false;
+//			
+//		}
+//setModeIDLE();
     /* Enable Power Save according the Advertising Interval */
     //BlueNRG_Sleep(SLEEPMODE_NOTIMER  , WAKEUP_IO9| WAKEUP_IO10| WAKEUP_IO12|WAKEUP_IO13, 0x01|0x02|0x08|0x10); // WAKEUP_IOx_LOW<<WAKEUP_IO12_SHIFT_MASK
 		
@@ -164,7 +164,7 @@ setModeIDLE();
 //				pinCheck = false;
 //			}
 //		}
-		pinCheck = true;
+//		pinCheck = true;
 		//BlueNRG_Sleep(SLEEPMODE_NOTIMER  , 0,0);
 		
 				//delay(2);
@@ -176,7 +176,7 @@ setModeIDLE();
 	//		}
 
 				
-		GPIO_WriteBit(Get_LedGpioPin(LED1), LED_OFF);		
+	//	GPIO_WriteBit(Get_LedGpioPin(LED1), LED_OFF);		
 		
 		
 #if ST_USE_OTA_SERVICE_MANAGER_APPLICATION
@@ -260,7 +260,7 @@ static void Start_Beaconing(void)
     printf ("hci_le_set_scan_resp_data() --> SUCCESS\r\n");
 
   /* put device in non connectable mode */
-  ret = aci_gap_set_discoverable(ADV_IND , 800, 800, PUBLIC_ADDR, NO_WHITE_LIST_USE,
+  ret = aci_gap_set_discoverable(ADV_IND , 160, 160, PUBLIC_ADDR, NO_WHITE_LIST_USE,
                                  0, NULL, 0, NULL, 0, 0); 
   if (ret != BLE_STATUS_SUCCESS)
   {
