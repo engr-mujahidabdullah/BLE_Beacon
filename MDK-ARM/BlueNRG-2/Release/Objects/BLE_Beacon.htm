@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Release\Objects\BLE_Beacon.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Release\Objects\BLE_Beacon.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060422: Last Updated: Mon Aug 24 15:04:36 2020
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060422: Last Updated: Mon Aug 24 15:49:36 2020
 <BR><P>
 <H3>Maximum Stack Usage =        720 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -281,7 +281,7 @@ Functions with no stack information
  <LI><a href="#[261]">aci_gatt_write_permit_req_event</a>
  <LI><a href="#[262]">aci_hal_fw_error_event</a>
  <LI><a href="#[263]">aci_hal_scan_req_report_event</a>
- <LI><a href="#[2ab]">aci_hal_set_radio_activity_mask</a>
+ <LI><a href="#[2aa]">aci_hal_set_radio_activity_mask</a>
  <LI><a href="#[ea]">aci_hal_set_tx_power_level</a>
  <LI><a href="#[264]">aci_l2cap_command_reject_event</a>
  <LI><a href="#[265]">aci_l2cap_connection_update_req_event</a>
@@ -1753,7 +1753,7 @@ Global Symbols
 
 <P><STRONG><a name="[28e]"></a>GPIO_WriteBit</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, bluenrg1_gpio.o(i.GPIO_WriteBit))
 <BR><BR>[Called By]<UL><LI><a href="#[1c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
-<LI><a href="#[2aa]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;setModeIDLE
+<LI><a href="#[2ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;setModeIDLE
 <LI><a href="#[2a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_data
 <LI><a href="#[2a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;nrf_init
 <LI><a href="#[28d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;init_GPIO
@@ -4309,7 +4309,7 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[2d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cb_aci_hal_scan_req_report_event
 </UL>
 
-<P><STRONG><a name="[2ab]"></a>aci_hal_set_radio_activity_mask</STRONG> (Thumb, 12 bytes, Stack size unknown bytes, hal.o(i.aci_hal_set_radio_activity_mask))
+<P><STRONG><a name="[2aa]"></a>aci_hal_set_radio_activity_mask</STRONG> (Thumb, 12 bytes, Stack size unknown bytes, hal.o(i.aci_hal_set_radio_activity_mask))
 <BR><BR>[Called By]<UL><LI><a href="#[1c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
@@ -5318,7 +5318,7 @@ Global Symbols
 <LI><a href="#[2b4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;start_timebase
 </UL>
 
-<P><STRONG><a name="[1c]"></a>main</STRONG> (Thumb, 172 bytes, Stack size 0 bytes, ble_beacon_main.o(i.main))
+<P><STRONG><a name="[1c]"></a>main</STRONG> (Thumb, 178 bytes, Stack size 0 bytes, ble_beacon_main.o(i.main))
 <BR><BR>[Stack]<UL><LI>Max Depth = 720 + Unknown Stack Size
 <LI>Call Chain = main &rArr; BlueNRG_Sleep &rArr; BlueNRG_InternalSleep &rArr; DeviceConfiguration &rArr; BOR_ConfigSave
 </UL>
@@ -5331,12 +5331,12 @@ Global Symbols
 <LI><a href="#[2a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SdkEvalIdentification
 <LI><a href="#[1ea]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SdkEvalComUartInit
 <LI><a href="#[2a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;tran_int
-<LI><a href="#[2aa]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;setModeIDLE
+<LI><a href="#[2ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;setModeIDLE
 <LI><a href="#[2a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_data
 <LI><a href="#[2a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;printRegisters
 <LI><a href="#[2a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;nrf_init
 <LI><a href="#[28d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;init_GPIO
-<LI><a href="#[2ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;aci_hal_set_radio_activity_mask
+<LI><a href="#[2aa]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;aci_hal_set_radio_activity_mask
 <LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BlueNRG_Stack_Initialization
 <LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BTLE_StackTick
 <LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Add_Service
@@ -5373,7 +5373,7 @@ Global Symbols
 <LI><a href="#[2ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;setRF
 <LI><a href="#[2ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;setPromiscuous
 <LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;setChannel
-<LI><a href="#[2aa]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;setModeIDLE
+<LI><a href="#[2ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;setModeIDLE
 <LI><a href="#[98]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[1c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
@@ -5434,7 +5434,7 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_BlueNRG_Stack_Initialization
 </UL>
 
-<P><STRONG><a name="[2a9]"></a>send_data</STRONG> (Thumb, 112 bytes, Stack size 16 bytes, _nrf905_.o(i.send_data))
+<P><STRONG><a name="[2a9]"></a>send_data</STRONG> (Thumb, 110 bytes, Stack size 16 bytes, _nrf905_.o(i.send_data))
 <BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = send_data &rArr; spiBurstWrite
 </UL>
 <BR>[Calls]<UL><LI><a href="#[28e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_WriteBit
@@ -5466,7 +5466,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[124]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_gap_set_discoverable_connectable
 </UL>
 
-<P><STRONG><a name="[2aa]"></a>setModeIDLE</STRONG> (Thumb, 32 bytes, Stack size 8 bytes, _nrf905_.o(i.setModeIDLE))
+<P><STRONG><a name="[2ab]"></a>setModeIDLE</STRONG> (Thumb, 32 bytes, Stack size 8 bytes, _nrf905_.o(i.setModeIDLE))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = setModeIDLE
 </UL>
 <BR>[Calls]<UL><LI><a href="#[28e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_WriteBit

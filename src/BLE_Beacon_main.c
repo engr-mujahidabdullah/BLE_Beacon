@@ -95,7 +95,8 @@ int main(void)
 	printRegisters();
 	
 	send_data(greatings, sizeof(greatings));
-	setModeIDLE();
+	//delay(5);
+	send_data(query_B3, 9);
 #if ST_USE_OTA_SERVICE_MANAGER_APPLICATION
   /* Initialize the button */
   SdkEvalPushButtonInit(USER_BUTTON); 

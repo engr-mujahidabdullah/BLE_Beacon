@@ -60,8 +60,8 @@ void nrf_init()
   GPIO_InitType GPIO_InitStructure;
   GPIO_InitStructure.GPIO_Pin = _chipEnablePin |  _txEnablePin;
   GPIO_InitStructure.GPIO_Mode = GPIO_Output;
-  GPIO_InitStructure.GPIO_Pull = DISABLE;
-  GPIO_InitStructure.GPIO_HighPwr = DISABLE;
+  GPIO_InitStructure.GPIO_Pull = ENABLE;
+  GPIO_InitStructure.GPIO_HighPwr = ENABLE;
   GPIO_Init(&GPIO_InitStructure);
 	/* Put the LEDs off */
   GPIO_WriteBit( _chipEnablePin, Bit_RESET);
@@ -218,11 +218,8 @@ void send_data(const uint8_t* data, uint8_t len)
     spiBurstWrite(RH_NRF905_REG_W_TX_PAYLOAD, _buf, len + RH_NRF905_HEADER_LEN);
 			
 		
-			if (_mode != RHModeTx)
-			{
-				GPIO_WriteBit( _chipEnablePin |  _txEnablePin, Bit_SET);
-				_mode = RHModeTx;
-			}
+			GPIO_WriteBit( _txEnablePin, Bit_SET);
+			GPIO_WriteBit( _chipEnablePin, Bit_SET);
 			
 			for(int i = 0; i < 100; i++){;}
 				
