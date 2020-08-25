@@ -41,6 +41,7 @@ uint8_t greatings[] = "HELLO SIR";
 uint8_t addr[] = {0xE7,0xE7,0xE7,0xE7};
 uint8_t ch = 108;
 bool bt = false;
+bool check = false;
 bool pinCheck = true;
 /* Private function prototypes -----------------------------------------------*/
 void Device_Init(void);
@@ -87,7 +88,7 @@ int main(void)
 	
 	flash_check();
 	flash_data_read();
-	
+	Clock_Init();
 	nrf_init(); 
 	tran_int();	
 	init_GPIO();
@@ -116,8 +117,25 @@ int main(void)
   {
     /* BlueNRG-1 stack tick */
     BTLE_StackTick();
-		BlueNRG_Sleep(SLEEPMODE_NOTIMER  ,0,0);
-		GPIO_WriteBit(Get_LedGpioPin(LED1), LED_OFF);
+		
+		BlueNRG_Sleep(SLEEPMODE_NOTIMER  , WAKEUP_IO12,WAKEUP_IOx_HIGH<<WAKEUP_IO12_SHIFT_MASK);//
+
+		
+		if(BlueNRG_WakeupSource() == WAKEUP_IO12)
+		{
+			if(GPIO_ReadBit(GPIO_Pin_12) == Bit_SET) {  check = true;}
+			else GPIO_ToggleBits(Get_LedGpioPin(LED2));
+			if( check == true)
+		{
+			check = false;
+			send_data(query_B2, 9);
+		}
+		}
+		
+		
+	//	pinCheck =  true;
+		
+		//GPIO_WriteBit(GPIO_Pin_4 | GPIO_Pin_5, Bit_RESET);
 //		if(bt == true)
 //		{
 //			send_data(query_B3, 9);

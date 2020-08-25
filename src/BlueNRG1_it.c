@@ -101,40 +101,40 @@ void SysTick_Handler(void)
 
 void GPIO_Handler(void)
 {
-  /* If BUTTON_1 is pressed LED1 is ON */
-		if(GPIO_GetITPendingBit(GPIO_Pin_9) == SET) 
-			{
-				if(GPIO_ReadBit(GPIO_Pin_9) == SET)
-				{
-					GPIO_ClearITPendingBit(GPIO_Pin_9);
-					printf("IN IRQ 1\n");
-				}
-			}
-		if(GPIO_GetITPendingBit(GPIO_Pin_10) == SET) 
-			{
-				if(GPIO_ReadBit(GPIO_Pin_10) == SET)
-				{
-					GPIO_ClearITPendingBit(GPIO_Pin_10);
-					printf("IN IRQ 2\n");
-				}
-			}
-    if(GPIO_GetITPendingBit(GPIO_Pin_12) == SET) 
-			{
-				if(GPIO_ReadBit(GPIO_Pin_12) == SET)
-				{
-					GPIO_ClearITPendingBit(GPIO_Pin_12);
-					bt = true;
-					printf("IN IRQ 3\n");
-				}
-			}
-		if(GPIO_GetITPendingBit(GPIO_Pin_13) == SET) 
-			{
-			if(GPIO_ReadBit(GPIO_Pin_13) == SET)
-				{
-					GPIO_ClearITPendingBit(GPIO_Pin_13);
-					printf("IN IRQ 4\n");
-				}
-			}
+//  /* If BUTTON_1 is pressed LED1 is ON */
+//		if(GPIO_GetITPendingBit(GPIO_Pin_9) == SET) 
+//			{
+//				if(GPIO_ReadBit(GPIO_Pin_9) == SET)
+//				{
+//					GPIO_ClearITPendingBit(GPIO_Pin_9);
+//					printf("IN IRQ 1\n");
+//				}
+//			}
+//		if(GPIO_GetITPendingBit(GPIO_Pin_10) == SET) 
+//			{
+//				if(GPIO_ReadBit(GPIO_Pin_10) == SET)
+//				{
+//					GPIO_ClearITPendingBit(GPIO_Pin_10);
+//					printf("IN IRQ 2\n");
+//				}
+//			}
+//    if(GPIO_GetITPendingBit(GPIO_Pin_12) == SET) 
+//			{
+//				if(GPIO_ReadBit(GPIO_Pin_12) == SET)
+//				{
+//					GPIO_ClearITPendingBit(GPIO_Pin_12);
+//					bt = true;
+//					printf("IN IRQ 3\n");
+//				}
+//			}
+//		if(GPIO_GetITPendingBit(GPIO_Pin_13) == SET) 
+//			{
+//			if(GPIO_ReadBit(GPIO_Pin_13) == SET)
+//				{
+//					GPIO_ClearITPendingBit(GPIO_Pin_13);
+//					printf("IN IRQ 4\n");
+//				}
+//			}
 }
 
 /******************************************************************************/

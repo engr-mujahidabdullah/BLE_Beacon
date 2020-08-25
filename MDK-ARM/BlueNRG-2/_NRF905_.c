@@ -216,16 +216,15 @@ void send_data(const uint8_t* data, uint8_t len)
     _buf[4] = len;
     memcpy(_buf+RH_NRF905_HEADER_LEN, data, len);
     spiBurstWrite(RH_NRF905_REG_W_TX_PAYLOAD, _buf, len + RH_NRF905_HEADER_LEN);
-			
-		
+	
 			GPIO_WriteBit( _txEnablePin, Bit_SET);
 			GPIO_WriteBit( _chipEnablePin, Bit_SET);
 			
-			for(int i = 0; i < 100; i++){;}
+			for(int i = 0; i < 1000; i++){;}
 				
 			GPIO_WriteBit( _txEnablePin, Bit_RESET);
 			GPIO_WriteBit( _chipEnablePin, Bit_RESET);
-		spiBurstWrite(RH_NRF905_REG_W_TX_PAYLOAD, 0, 0);
+		//spiBurstWrite(RH_NRF905_REG_W_TX_PAYLOAD, 0, 0);
 				//_txGood++;	
 }
 

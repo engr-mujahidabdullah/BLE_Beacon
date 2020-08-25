@@ -93,8 +93,8 @@
 #define RH_NRF905_STATUS_AM                   0x80
 #define RH_NRF905_STATUS_DR                   0x20
 
-#define _chipEnablePin 	GPIO_Pin_5 
-#define _txEnablePin		GPIO_Pin_4
+#define _chipEnablePin 	GPIO_Pin_8 
+#define _txEnablePin		GPIO_Pin_14
 
 
 
