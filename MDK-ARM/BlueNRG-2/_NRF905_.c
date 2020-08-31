@@ -55,24 +55,24 @@ extern uint8_t addr[];
 void nrf_init()
 {
 	/* Enable the GPIO Clock */
-  SysCtrl_PeripheralClockCmd(CLOCK_PERIPH_GPIO, ENABLE);
+	SysCtrl_PeripheralClockCmd(CLOCK_PERIPH_GPIO, ENABLE);
 	 /* Configure the LEDs */
-  GPIO_InitType GPIO_InitStructure;
-  GPIO_InitStructure.GPIO_Pin = _chipEnablePin |  _txEnablePin;
-  GPIO_InitStructure.GPIO_Mode = GPIO_Output;
-  GPIO_InitStructure.GPIO_Pull = DISABLE;
-  GPIO_InitStructure.GPIO_HighPwr = DISABLE;
-  GPIO_Init(&GPIO_InitStructure);
+	GPIO_InitType GPIO_InitStructure;
+	GPIO_InitStructure.GPIO_Pin = _chipEnablePin |  _txEnablePin;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Output;
+	GPIO_InitStructure.GPIO_Pull = DISABLE;
+	GPIO_InitStructure.GPIO_HighPwr = DISABLE;
+	GPIO_Init(&GPIO_InitStructure);
 	/* Put the LEDs off */
-  GPIO_WriteBit( _chipEnablePin, Bit_RESET);
+	GPIO_WriteBit( _chipEnablePin, Bit_RESET);
 	GPIO_WriteBit( _txEnablePin, Bit_RESET);
 	
 	
 	SdkEvalSpiInit(100000);
 	
 	setModeIDLE();
-		setRF(TransmitPowerm10dBm);
-		setChannel(ch,FALSE);
+	setRF(TransmitPowerm10dBm);
+	setChannel(ch,FALSE);
 	//spiWriteRegister(0x00,0x6C);
 	spiWriteRegister(0x01,0x00);
 	spiWriteRegister(0x02,0x44);spiWriteRegister(0x03,0x20);
@@ -228,6 +228,29 @@ void send_data(const uint8_t* data, uint8_t len)
 				//_txGood++;	
 }
 
+uint8_t status_read(void)
+{
+	 		/* Set communication mode */
+		SPI_SetMasterCommunicationMode(SPI_FULL_DUPLEX_MODE);
+	
+    uint8_t val;
+		GPIO_ResetBits(SPI_CS_MS_DEMO_PIN); 
+	
+		while(RESET == SPI_GetFlagStatus(SPI_FLAG_RNE));
+		SPI_ReceiveData();
+	
+		for(uint8_t i = 0; i< 1; i++) 
+		{
+    while(RESET == SPI_GetFlagStatus(SPI_FLAG_TFE));
+    SPI_SendData(0x00);  
+    while(RESET == SPI_GetFlagStatus(SPI_FLAG_RNE));
+    val = SPI_ReceiveData();
+		}
+		
+		while (SET == SPI_GetFlagStatus(SPI_FLAG_BSY)){};
+		GPIO_SetBits(SPI_CS_MS_DEMO_PIN);
+    return val;
+}
 BOOL data_recv(uint8_t* buf, uint8_t* len)
 {
 		if (!NRF_data_available())

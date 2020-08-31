@@ -33,34 +33,43 @@
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 static uint32_t Next_Advertising_SysTime = 0;
+// send data associated to buttons
 uint8_t query_B1[] = "button_1";
 uint8_t query_B2[] = "button_2";
 uint8_t query_B3[] = "button_3";
 uint8_t query_B4[] = "button_4";
 uint8_t greatings[] = "HELLO SIR";
-uint8_t addr[] = {0xE7,0xE7,0xE7,0xE7};
-uint8_t ch = 108;
+
+uint8_t addr[] = {0xE7,0xE7,0xE7,0xE7}; //Default Address of NRF-905
+uint8_t ch = 108;	// Default Chanel of NRF-905
+
+// limit variabloes
 bool bt = false;
 bool check = false;
 bool pinCheck = true;
+
 /* Private function prototypes -----------------------------------------------*/
-void Device_Init(void);
-static void Start_Beaconing(void);
-void flash_check(void);
-void flash_data_read(void);
-void init_GPIO_(void);
+void Device_Init(void);  						// Device initialization function
+static void Start_Beaconing(void); //Beconing start function
+void flash_check(void); 					// check data from flash memory
+void flash_data_read(void); 		 //Function to read data from memory
 	
-void delay(double number_of_seconds) 
-{ 
-    // Converting time into milli_seconds 
-    double milli_seconds = 1000 * number_of_seconds; 
-  
-    // Storing start time 
-    clock_t start_time = clock(); 
-  
-    // looping till required time is not achieved 
-    while (clock() < start_time + milli_seconds); 
-} 
+/*----------------------------------------------------------------------------*/
+/* Enable the Standby - SLEEPMODE_NOTIMER */
+void sleep(void)
+{
+  uint8_t ret, wakeup_source, wakeup_level;
+
+  wakeup_source = WAKEUP_IO12;
+  wakeup_level = (WAKEUP_IOx_HIGH << WAKEUP_IO12_SHIFT_MASK);
+
+  while(SdkEvalComUARTBusy() == SET);
+  ret = BlueNRG_Sleep(SLEEPMODE_NOTIMER, wakeup_source, wakeup_level);
+  if (ret != BLE_STATUS_SUCCESS) {
+    printf("BlueNRG_Sleep() error 0x%02x\r\n", ret);
+    while(1);
+  }
+}
 
 int main(void) 
 {
@@ -73,7 +82,8 @@ int main(void)
 
   /* Init the UART peripheral */
   SdkEvalComUartInit(UART_BAUDRATE); 
-
+	
+	//while(1);
   /* BlueNRG-1 stack init */
   ret = BlueNRG_Stack_Initialization(&BlueNRG_Stack_Init_params);
   if (ret != BLE_STATUS_SUCCESS) 
@@ -84,26 +94,44 @@ int main(void)
   
   /* Init the BlueNRG-1 device */
   Device_Init();
-	Add_Service();
-	
+
+	/* Check the memory either empty or not and write flash memory to default if needed*/
 	flash_check();
+
+	/* read existed wariables from memory on setup */
 	flash_data_read();
-	Clock_Init();
+
+	/* Initialize NRF-905 & data blocks*/
 	nrf_init(); 
 	tran_int();	
-	init_GPIO();
-	Clock_Init();
-	printRegisters();
 	
-	send_data(query_B1, 9);
+	/* Initiallize Gpio*/
+	init_GPIO();
+	
+	/* Add Services */
+	Add_Service();
+	printRegisters();
+	/* Enable the callback end_of_radio_activity_event for advertising */
+  aci_hal_set_radio_activity_mask(0x0002); 
 	
 #if ST_USE_OTA_SERVICE_MANAGER_APPLICATION
   /* Initialize the button */
   SdkEvalPushButtonInit(USER_BUTTON); 
 #endif /* ST_USE_OTA_SERVICE_MANAGER_APPLICATION */
 	
-  /* Enable the callback end_of_radio_activity_event for advertising */
-  //aci_hal_set_radio_activity_mask(0x0002); 
+	/* Send greatings on Setup */
+	send_data(query_B1, 9);
+	
+	for(int c = 0; c < 10 ; c++);
+	
+	GPIO_WriteBit( _txEnablePin, Bit_RESET);
+	GPIO_WriteBit( _chipEnablePin, Bit_SET);
+	uint8_t status = statusRead();
+	printf("%d", status & RH_NRF905_STATUS_DR);
+	while(1)
+	{
+		;
+	}
 	
   /* Start Beacon Non Connectable Mode*/
   Start_Beaconing();
@@ -118,83 +146,13 @@ int main(void)
     /* BlueNRG-1 stack tick */
     BTLE_StackTick();
 		
-		BlueNRG_Sleep(SLEEPMODE_NOTIMER  , WAKEUP_IO12,WAKEUP_IOx_HIGH<<WAKEUP_IO12_SHIFT_MASK);//
+		sleep();
 
 		
 		if(BlueNRG_WakeupSource() == WAKEUP_IO12)
 		{
-			if(GPIO_ReadBit(GPIO_Pin_12) == Bit_SET) {  check = true;}
-			else GPIO_ToggleBits(Get_LedGpioPin(LED2));
-			if( check == true)
-		{
-			check = false;
-			send_data(query_B2, 9);
+			send_data(query_B3, 9);
 		}
-		}
-		
-		
-	//	pinCheck =  true;
-		
-		//GPIO_WriteBit(GPIO_Pin_4 | GPIO_Pin_5, Bit_RESET);
-//		if(bt == true)
-//		{
-//			send_data(query_B3, 9);
-//			bt = false;
-//			
-//		}
-//setModeIDLE();
-    /* Enable Power Save according the Advertising Interval */
-    //BlueNRG_Sleep(SLEEPMODE_NOTIMER  , WAKEUP_IO9| WAKEUP_IO10| WAKEUP_IO12|WAKEUP_IO13, 0x01|0x02|0x08|0x10); // WAKEUP_IOx_LOW<<WAKEUP_IO12_SHIFT_MASK
-		
-		//BlueNRG_Sleep(SLEEPMODE_NOTIMER  ,WAKEUP_IO12 /*| WAKEUP_IO13*/ , WAKEUP_IOx_HIGH<<WAKEUP_IO12_SHIFT_MASK );//| WAKEUP_IOx_HIGH<<WAKEUP_IO13_SHIFT_MASK);
-//		while(BlueNRG_WakeupSource() == WAKEUP_IO12)
-//		{
-//			if(pinCheck)
-//			{
-//				send_data(query_B3,sizeof(query_B3));
-//				pinCheck = false;
-//			}
-//		}
-//		
-//		while(BlueNRG_WakeupSource() == WAKEUP_IO13)
-//		{
-//			if(pinCheck)
-//			{
-//				send_data(query_B4,sizeof(query_B4));
-//				pinCheck = false;
-//			}
-//		}
-//		
-//		while(BlueNRG_WakeupSource() == WAKEUP_IO10)
-//		{
-//			if(pinCheck)
-//			{
-//				send_data(query_B2,sizeof(query_B2));
-//				pinCheck = false;
-//			}
-//		}
-//		
-//		while(BlueNRG_WakeupSource() == WAKEUP_IO9)
-//		{
-//			if(pinCheck)
-//			{
-//				send_data(query_B1,sizeof(query_B1));
-//				pinCheck = false;
-//			}
-//		}
-//		pinCheck = true;
-		//BlueNRG_Sleep(SLEEPMODE_NOTIMER  , 0,0);
-		
-				//delay(2);
-			
-		//if( pinCheck== WAKEUP_IO12) 
-		//	{
-	//			//GPIO_WriteBit(Get_LedGpioPin(LED1), LED_ON);
-	//			send_data(query_B4, sizeof(query_B4));
-	//		}
-
-				
-	//	GPIO_WriteBit(Get_LedGpioPin(LED1), LED_OFF);		
 		
 		
 #if ST_USE_OTA_SERVICE_MANAGER_APPLICATION

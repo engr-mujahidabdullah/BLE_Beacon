@@ -26,12 +26,15 @@ void init_GPIO(void)
   GPIO_WriteBit(Get_LedGpioPin(LED1), Bit_RESET);
   
   /* Configure the push buttons */
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12 | GPIO_Pin_13;
+  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12;// | GPIO_Pin_13;
 	//GPIO_Pin_9 | GPIO_Pin_10 | GPIO_Pin_12 | GPIO_Pin_13;
   GPIO_InitStructure.GPIO_Mode = GPIO_Input;
   GPIO_InitStructure.GPIO_Pull = DISABLE;
   GPIO_InitStructure.GPIO_HighPwr = DISABLE;
-  GPIO_Init(&GPIO_InitStructure);
+  /* GPIO12 initialization during low power modes for BlueNRG-2. */
+  GPIO_InitLowPowerModes(&GPIO_InitStructure);
+  /* Set the output state of the GIO12 during low power modes. BlueNRG-2 only */
+  GPIO_WriteBitsLowPowerModes(GPIO_Pin_12, Bit_SET);
   
 //  /* Set the GPIO interrupt priority and enable it */
 //  NVIC_InitType NVIC_InitStructure;
@@ -41,7 +44,7 @@ void init_GPIO(void)
 //  NVIC_Init(&NVIC_InitStructure);
 //  
 //  /* Configures EXTI line for BUTTON_1 */
-//  GPIO_EXTIConfigType GPIO_EXTIStructure;
+//		GPIO_EXTIConfigType GPIO_EXTIStructure;
 //  GPIO_EXTIStructure.GPIO_Pin =  GPIO_Pin_9;
 //  GPIO_EXTIStructure.GPIO_IrqSense = GPIO_IrqSense_Edge;
 //  GPIO_EXTIStructure.GPIO_Event = IRQ_ON_RISING_EDGE;
@@ -62,12 +65,12 @@ void init_GPIO(void)
 //  GPIO_EXTIStructure.GPIO_Pin =  GPIO_Pin_12;
 //  GPIO_EXTIStructure.GPIO_Event = IRQ_ON_RISING_EDGE;
 //  GPIO_EXTIConfig(&GPIO_EXTIStructure);
-//  
+////  
 //  /* Clear pending interrupt */
 //  GPIO_ClearITPendingBit(GPIO_Pin_9 | GPIO_Pin_10 | GPIO_Pin_12 | GPIO_Pin_13);
-//  
-//  /* Enable the interrupt */
+////  
+////  /* Enable the interrupt */
 //  GPIO_EXTICmd(GPIO_Pin_9 | GPIO_Pin_10 | GPIO_Pin_12 | GPIO_Pin_13, ENABLE);
-	
+//	
 	printf("Required GPIO PINS are Initialized\n");
 }

@@ -33,6 +33,8 @@
 #include "stdbool.h."
 
 extern bool bt;
+extern uint8_t query_B1[];
+
 /** @addtogroup BlueNRG1_StdPeriph_Examples
   * @{
   */
@@ -123,8 +125,7 @@ void GPIO_Handler(void)
 //				if(GPIO_ReadBit(GPIO_Pin_12) == SET)
 //				{
 //					GPIO_ClearITPendingBit(GPIO_Pin_12);
-//					bt = true;
-//					printf("IN IRQ 3\n");
+//					bt = true;send_data(query_B1, 9);
 //				}
 //			}
 //		if(GPIO_GetITPendingBit(GPIO_Pin_13) == SET) 

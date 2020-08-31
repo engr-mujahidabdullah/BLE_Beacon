@@ -93,7 +93,7 @@
 #define RH_NRF905_STATUS_AM                   0x80
 #define RH_NRF905_STATUS_DR                   0x20
 
-#define _chipEnablePin 	GPIO_Pin_8 
+#define _chipEnablePin 	GPIO_Pin_13
 #define _txEnablePin		GPIO_Pin_14
 
 
@@ -142,6 +142,8 @@ void setHeaderTo(uint8_t to);
 void setHeaderFrom(uint8_t from);
 void setHeaderId(uint8_t id);
 void setHeaderFlags(uint8_t set, uint8_t clear);
+
+uint8_t status_read(void);
 
 void setModeIDLE(void);
 void setModeTx(void);
