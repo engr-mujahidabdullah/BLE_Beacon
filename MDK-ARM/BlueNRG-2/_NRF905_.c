@@ -3,54 +3,55 @@
 #include "osal.h"
 #include "string.h"
 #include "stdbool.h."
+#include "Clock.h"
 
 extern uint8_t ch;
 extern uint8_t addr[];
-    /// The receiver/transmitter buffer
-    uint8_t             _buf[RH_NRF905_MAX_PAYLOAD_LEN];
-		    /// TO header in the last received mesasge
-    volatile uint8_t    _rxHeaderTo;
+/// The receiver/transmitter buffer
+uint8_t             _buf[RH_NRF905_MAX_PAYLOAD_LEN];
+  /// TO header in the last received mesasge
+volatile uint8_t    _rxHeaderTo;
 
-    /// FROM header in the last received mesasge
-    volatile uint8_t    _rxHeaderFrom;
+/// FROM header in the last received mesasge
+volatile uint8_t    _rxHeaderFrom;
 
-    /// ID header in the last received mesasge
-    volatile uint8_t    _rxHeaderId;
+/// ID header in the last received mesasge
+volatile uint8_t    _rxHeaderId;
 
-    /// FLAGS header in the last received mesasge
-    volatile uint8_t    _rxHeaderFlags;
+/// FLAGS header in the last received mesasge
+volatile uint8_t    _rxHeaderFlags;
 
-    /// TO header to send in all messages
-    uint8_t             _txHeaderTo;
+/// TO header to send in all messages
+uint8_t             _txHeaderTo;
 
-    /// FROM header to send in all messages
-    uint8_t             _txHeaderFrom;
+/// FROM header to send in all messages
+uint8_t             _txHeaderFrom;
 
-    /// ID header to send in all messages
-    uint8_t             _txHeaderId;
-		
-		/// FLAGS header to send in all messages
-    uint8_t             _txHeaderFlags;
-		
-		    /// Count of the number of bad messages (eg bad checksum etc) received
-    volatile uint16_t   _rxBad;
+/// ID header to send in all messages
+uint8_t             _txHeaderId;
 
-    /// Count of the number of successfully transmitted messaged
-    volatile uint16_t   _rxGood;
+// FLAGS header to send in all messages
+uint8_t             _txHeaderFlags;
 
-    /// Count of the number of bad messages (correct checksum etc) received
-    volatile uint16_t   _txGood;
-		/// True when there is a valid message in the buffer
-    BOOL                _rxBufValid;
-    /// This node id
-    uint8_t             _thisAddress;
-    
-    /// Whether the transport is in promiscuous mode
-        bool           _promiscuous;
-    /// Number of octets in the buffer
-    uint8_t             _bufLen;
-		/// The current transport operating mode
-    volatile RHMode     _mode;
+  /// Count of the number of bad messages (eg bad checksum etc) received
+volatile uint16_t   _rxBad;
+
+/// Count of the number of successfully transmitted messaged
+volatile uint16_t   _rxGood;
+
+/// Count of the number of bad messages (correct checksum etc) received
+volatile uint16_t   _txGood;
+// True when there is a valid message in the buffer
+bool                _rxBufValid;
+/// This node id
+uint8_t             _thisAddress;
+
+/// Whether the transport is in promiscuous mode
+    bool           _promiscuous;
+/// Number of octets in the buffer
+uint8_t             _bufLen;
+// The current transport operating mode
+volatile RHMode     _mode;
 		
 void nrf_init()
 {
@@ -63,6 +64,17 @@ void nrf_init()
 	GPIO_InitStructure.GPIO_Pull = DISABLE;
 	GPIO_InitStructure.GPIO_HighPwr = DISABLE;
 	GPIO_Init(&GPIO_InitStructure);
+	
+//	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10;
+//  GPIO_InitStructure.GPIO_Mode = GPIO_Input;
+//  GPIO_InitStructure.GPIO_Pull = DISABLE;
+//  GPIO_InitStructure.GPIO_HighPwr = DISABLE;
+//  /* GPIO12 initialization during low power modes for BlueNRG-2. */
+//  GPIO_InitLowPowerModes(&GPIO_InitStructure);
+//	
+//  /* Set the output state of the GIO12 during low power modes. BlueNRG-2 only */
+//  GPIO_WriteBitsLowPowerModes(GPIO_Pin_10, Bit_RESET);
+	
 	/* Put the LEDs off */
 	GPIO_WriteBit( _chipEnablePin, Bit_RESET);
 	GPIO_WriteBit( _txEnablePin, Bit_RESET);
@@ -135,46 +147,42 @@ void validateRxBuf()
     // Check the length
     uint8_t len = _buf[4];
     if (len > RH_NRF905_MAX_MESSAGE_LEN)
-			return; // Silly LEN header
+			return ; // Silly LEN header
 
     // Extract the 4 headers
     _rxHeaderTo    = _buf[0];
     _rxHeaderFrom  = _buf[1];
     _rxHeaderId    = _buf[2];
     _rxHeaderFlags = _buf[3];
+		_rxBufValid = false;
     if (_promiscuous ||
-	_rxHeaderTo == _thisAddress ||
-	_rxHeaderTo == RH_BROADCAST_ADDRESS)
+					_rxHeaderTo == _thisAddress ||
+					_rxHeaderTo == RH_BROADCAST_ADDRESS)
     {
-	_rxGood++;
-	_bufLen = len + RH_NRF905_HEADER_LEN; // _buf still includes the headers
-	_rxBufValid = TRUE;
-    }
+			_rxGood++;
+			_bufLen = len + RH_NRF905_HEADER_LEN; // _buf still includes the headers
+			_rxBufValid = true;
+   }
 }
 
-BOOL NRF_data_available()
+bool NRF_data_available(void)
 {
-    if (!_rxBufValid)
-    {
-			if (_mode == RHModeTx)
-					return FALSE;
-			if (_mode != RHModeRx)
-					{
-						GPIO_WriteBit( _chipEnablePin |  _txEnablePin, Bit_SET);
-						_mode = RHModeRx;
-					}
-					
-// Get the message into the RX buffer, so we can inspect the headers
-// we still dont know how long is the user message
-			
+	if(!_rxBufValid)
+	{
+		if( GPIO_ReadBit(_txEnablePin) == Bit_RESET && GPIO_ReadBit(_chipEnablePin) == Bit_SET)
+		{
+			if (!(statusRead() & RH_NRF905_STATUS_DR))
+			{
+				return false;
+			}
 			spiBurstRead(RH_NRF905_REG_R_RX_PAYLOAD, _buf, RH_NRF905_MAX_PAYLOAD_LEN);
-					validateRxBuf();
-			printf("%d\n",_rxBufValid); 
-			if (_rxBufValid)
-					setModeIDLE();
+			validateRxBuf(); 
+			if (_rxBufValid) GPIO_WriteBit(_txEnablePin | _chipEnablePin, Bit_RESET);
 		}
-    return _rxBufValid;
+	}
+	return _rxBufValid;
 }
+    
 
 void tran_int(void)
 {
@@ -251,10 +259,11 @@ uint8_t status_read(void)
 		GPIO_SetBits(SPI_CS_MS_DEMO_PIN);
     return val;
 }
-BOOL data_recv(uint8_t* buf, uint8_t* len)
+
+bool data_recv(uint8_t* buf, uint8_t* len)
 {
 		if (!NRF_data_available())
-	return FALSE;
+	return false;
     if (buf && len)
     {
 	// Skip the 4 headers that are at the beginning of the rxBuf
@@ -263,7 +272,29 @@ BOOL data_recv(uint8_t* buf, uint8_t* len)
 	memcpy(buf, _buf+RH_NRF905_HEADER_LEN, *len);
     }
     clearRxBuf(); // This message accepted and cleared
-    return TRUE;
+    return true;
+}
+
+void  RX_check()
+{
+   GPIO_WriteBit( _txEnablePin, Bit_RESET);
+	 GPIO_WriteBit( _chipEnablePin, Bit_SET);
+	
+    while (check_ready()==0);
+    Clock_Wait(1);
+    printf("Data receive");
+    Clock_Wait(1);
+}
+
+unsigned char check_ready(void)
+{
+    if(GPIO_ReadBit(_DR) == Bit_SET)	
+			{
+				return 1;
+			}
+	else	{
+				return 0;
+			}
 }
 
 void clearRxBuf()

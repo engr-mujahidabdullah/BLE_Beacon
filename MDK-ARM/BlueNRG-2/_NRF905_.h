@@ -8,6 +8,7 @@
 #include "stdlib.h"
 #include "math.h"
 #include "SDK_EVAL_SPI.h"
+#include "stdbool.h"
 
 #define RH_NRF905_MAX_PAYLOAD_LEN 32
 
@@ -95,7 +96,7 @@
 
 #define _chipEnablePin 	GPIO_Pin_13
 #define _txEnablePin		GPIO_Pin_14
-
+#define _DR		GPIO_Pin_10
 
 
 
@@ -148,12 +149,14 @@ uint8_t status_read(void);
 void setModeIDLE(void);
 void setModeTx(void);
 void setModeRx(void); 
-
+void  RX_check();
 void setPromiscuous(BOOL promiscuous);
 void setThisAddress(uint8_t address);
 
-BOOL NRF_data_available(void);
+bool NRF_data_available();
 uint8_t ch_no(float frequency);
 void clearRxBuf(void);
-BOOL data_recv(uint8_t* buf, uint8_t* len);
+bool data_recv(uint8_t* buf, uint8_t* len);
+unsigned char check_ready(void);
+
 #endif

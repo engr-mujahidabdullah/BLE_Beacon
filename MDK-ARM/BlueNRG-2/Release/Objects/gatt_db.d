@@ -44,3 +44,4 @@
 .\release\objects\gatt_db.o: SPI_init.h
 .\release\objects\gatt_db.o: ..\..\..\..\..\Library\BlueNRG1_Periph_Driver\inc\BlueNRG1_spi.h
 .\release\objects\gatt_db.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+.\release\objects\gatt_db.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h

@@ -32,6 +32,8 @@
 .\release\objects\_nrf905_.o: ..\..\..\..\..\Library\SDK_Eval_BlueNRG1\inc\SDK_EVAL_I2C.h
 .\release\objects\_nrf905_.o: ..\..\..\..\..\Library\SDK_Eval_BlueNRG1\inc\SDK_EVAL_Led.h
 .\release\objects\_nrf905_.o: ..\..\..\..\..\Library\SDK_Eval_BlueNRG1\inc\SDK_EVAL_SPI.h
+.\release\objects\_nrf905_.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
 .\release\objects\_nrf905_.o: ..\..\..\..\..\Library\hal\inc\osal.h
 .\release\objects\_nrf905_.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 .\release\objects\_nrf905_.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h.
+.\release\objects\_nrf905_.o: ..\..\..\..\..\Library\hal\inc\Clock.h

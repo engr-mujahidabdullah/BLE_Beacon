@@ -44,4 +44,5 @@
 .\release\objects\bluenrg1_it.o: ..\..\..\..\..\Library\BlueNRG1_Periph_Driver\inc\BlueNRG1_spi.h
 .\release\objects\bluenrg1_it.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 .\release\objects\bluenrg1_it.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
+.\release\objects\bluenrg1_it.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
 .\release\objects\bluenrg1_it.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h.

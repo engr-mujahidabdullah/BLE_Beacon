@@ -32,3 +32,4 @@
 .\release\objects\sdk_eval_spi.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 .\release\objects\sdk_eval_spi.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 .\release\objects\sdk_eval_spi.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
+.\release\objects\sdk_eval_spi.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h

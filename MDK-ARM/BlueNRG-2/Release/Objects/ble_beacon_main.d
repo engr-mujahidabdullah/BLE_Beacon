@@ -50,6 +50,7 @@
 .\release\objects\ble_beacon_main.o: ..\BlueNRG-2\SPI_init.h
 .\release\objects\ble_beacon_main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 .\release\objects\ble_beacon_main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\math.h
+.\release\objects\ble_beacon_main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
 .\release\objects\ble_beacon_main.o: ..\BlueNRG-2\Gatt_db.h
 .\release\objects\ble_beacon_main.o: ..\BlueNRG-2\flash_wr.h
 .\release\objects\ble_beacon_main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h.

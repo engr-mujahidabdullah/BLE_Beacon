@@ -120,17 +120,20 @@ int main(void)
 #endif /* ST_USE_OTA_SERVICE_MANAGER_APPLICATION */
 	
 	/* Send greatings on Setup */
-	send_data(query_B1, 9);
+	send_data(greatings, 9);
 	
 	for(int c = 0; c < 10 ; c++);
-	
+	uint8_t buffer[RH_NRF905_MAX_MESSAGE_LEN];
+   uint8_t length = sizeof(buffer);
 	GPIO_WriteBit( _txEnablePin, Bit_RESET);
 	GPIO_WriteBit( _chipEnablePin, Bit_SET);
-	uint8_t status = statusRead();
-	printf("%d", status & RH_NRF905_STATUS_DR);
+	//uint8_t status = statusRead();
+	//printf("%d", status & RH_NRF905_STATUS_DR);
+	//Clock_Init();
 	while(1)
 	{
-		;
+		data_recv(buffer, &length);
+		//Clock_Wait(1000);
 	}
 	
   /* Start Beacon Non Connectable Mode*/
@@ -145,12 +148,12 @@ int main(void)
   {
     /* BlueNRG-1 stack tick */
     BTLE_StackTick();
-		
 		sleep();
 
 		
 		if(BlueNRG_WakeupSource() == WAKEUP_IO12)
 		{
+			if(check == true)
 			send_data(query_B3, 9);
 		}
 		
